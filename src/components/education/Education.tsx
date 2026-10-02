@@ -1,245 +1,140 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useIntersectionObserver, useReducedMotion } from "@/hooks";
-import { education, certifications, learningRoadmap } from "@/data/resume";
-import { GraduationCap, Award, Target, CheckCircle, Clock, TrendingUp } from "lucide-react";
+import { Award, CheckCircle, Clock, GraduationCap } from "lucide-react";
+import { Reveal, Section, SectionHeading } from "@/components/ui/Section";
+import { certifications, education, learningRoadmap } from "@/data/resume";
+
+const phaseLabels: Record<string, string> = {
+  foundation: "Foundation",
+  next: "Up next",
+  cloud: "Cloud",
+  engineering: "Engineering",
+};
 
 export function Education() {
-  const reducedMotion = useReducedMotion();
-  const { ref, isIntersecting } = useIntersectionObserver({ threshold: 0.15 });
-
   return (
-    <section
-      ref={ref}
-      id="education"
-      className="relative py-24 md:py-32 px-6"
-      aria-labelledby="education-heading"
-    >
-      <div className="max-w-5xl mx-auto">
-        <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: isIntersecting ? 1 : 0, y: 0 }}
-          transition={{ duration: reducedMotion ? 0 : 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-        >
-          <motion.span
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium tracking-wider uppercase"
-            style={{
-              background: "rgba(6, 182, 212, 0.1)",
-              border: "1px solid rgba(6, 182, 212, 0.3)",
-              color: "#06b6d4",
-            }}
-          >
-            Education & Growth
-          </motion.span>
-          <h2
-            id="education-heading"
-            className="mt-6 text-4xl md:text-5xl font-bold tracking-tight text-white leading-[1.1]"
-          >
-            Academic <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-violet-500">Foundation</span> & Certifications
-          </h2>
-        </motion.div>
+    <Section id="education" labelledBy="education-heading">
+      <SectionHeading
+        id="education-heading"
+        index="06"
+        eyebrow="Education & growth"
+        title="Academic"
+        highlight="foundation"
+        description="Formal education, certifications, and where I'm headed next."
+      />
 
-        <motion.div
-          className="space-y-16"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: isIntersecting ? 1 : 0, y: 0 }}
-          transition={{ delay: 0.2, duration: reducedMotion ? 0 : 0.8 }}
-        >
-          <motion.div className="relative">
-            <motion.h3 className="text-lg font-semibold text-white mb-8 flex items-center gap-3">
-              <GraduationCap className="w-5 h-5" style={{ color: "#06b6d4" }} />
+      <div className="grid gap-8 lg:grid-cols-5">
+        <div className="lg:col-span-3">
+          <Reveal>
+            <h3 className="mb-6 flex items-center gap-2.5 text-sm font-semibold uppercase tracking-wider text-zinc-400">
+              <GraduationCap className="size-4 text-primary" aria-hidden="true" />
               Education
-            </motion.h3>
+            </h3>
+          </Reveal>
 
-            <motion.div className="space-y-6">
-              {education.map((edu, index) => (
-                <motion.article
-                  key={edu.id}
-                  className="relative p-6 md:p-8 rounded-2xl group"
-                  style={{
-                    background: "rgba(15, 23, 42, 0.6)",
-                    border: "1px solid rgba(148, 163, 184, 0.1)",
-                    backdropFilter: "blur(10px)",
-                  }}
-                  whileHover={{ borderColor: "rgba(6, 182, 212, 0.5)" }}
-                  initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1, duration: reducedMotion ? 0 : 0.5 }}
-                >
-                  <div className="flex items-start gap-4">
-                    <motion.div
-                      className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
-                      style={{
-                        background: "rgba(6, 182, 212, 0.15)",
-                        border: "1px solid rgba(6, 182, 212, 0.2)",
-                      }}
-                    >
-                      <GraduationCap className="w-6 h-6" style={{ color: "#06b6d4" }} />
-                    </motion.div>
-                    <div className="flex-1 min-w-0">
-                      <motion.h4 className="text-xl font-semibold text-white mb-1">{edu.degree}</motion.h4>
-                      <motion.p className="text-cyan-400 font-medium mb-2">{edu.institution}</motion.p>
-                      <motion.div className="flex flex-wrap items-center gap-4 text-zinc-500 text-sm">
-                        {edu.board && <motion.span>{edu.board}</motion.span>}
-                        <motion.span>{edu.period}</motion.span>
-                        {edu.cgpa && <motion.span className="font-medium text-white">{edu.cgpa}</motion.span>}
-                        {edu.percentage && <motion.span className="font-medium text-white">{edu.percentage}</motion.span>}
-                      </motion.div>
-                      {edu.details && (
-                        <motion.ul className="mt-4 space-y-2">
-                          {edu.details.map((detail, i) => (
-                            <motion.li key={i} className="flex items-center gap-2 text-zinc-400 text-sm">
-                              <CheckCircle className="w-4 h-4 flex-shrink-0" style={{ color: "#22c55e" }} />
-                              {detail}
-                            </motion.li>
-                          ))}
-                        </motion.ul>
-                      )}
+          <ol className="relative space-y-5 border-l border-white/10 pl-7">
+            {education.map((edu, i) => (
+              <li key={edu.id} className="relative">
+                <span
+                  className="absolute -left-[34px] top-7 size-3 rounded-full border-2 border-primary bg-zinc-950"
+                  aria-hidden="true"
+                />
+                <Reveal delay={i * 0.08}>
+                  <article className="card p-6">
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <h4 className="text-lg font-semibold leading-snug text-white">{edu.degree}</h4>
+                        <p className="mt-1 text-primary">{edu.institution}</p>
+                      </div>
+                      <span className="font-mono text-xs text-zinc-500">{edu.period}</span>
                     </div>
-                  </div>
 
-                  <motion.div
-                    className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                    style={{ background: "linear-gradient(135deg, rgba(6, 182, 212, 0.05) 0%, transparent 50%)" }}
-                  />
-                </motion.article>
-              ))}
-            </motion.div>
-          </motion.div>
+                    <ul className="mt-4 flex flex-wrap gap-2">
+                      {edu.board && <li className="chip">{edu.board}</li>}
+                      {edu.cgpa && <li className="chip chip-primary">CGPA {edu.cgpa}</li>}
+                      {edu.percentage && <li className="chip chip-primary">{edu.percentage}</li>}
+                    </ul>
 
-          <motion.div className="relative">
-            <motion.h3 className="text-lg font-semibold text-white mb-8 flex items-center gap-3">
-              <Award className="w-5 h-5" style={{ color: "#f59e0b" }} />
+                    {edu.details && (
+                      <ul className="mt-4 space-y-1.5 text-sm text-zinc-400">
+                        {edu.details.map((d) => (
+                          <li key={d} className="flex items-center gap-2">
+                            <CheckCircle className="size-4 shrink-0 text-emerald-400" aria-hidden="true" />
+                            {d}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </article>
+                </Reveal>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        <div className="lg:col-span-2">
+          <Reveal>
+            <h3 className="mb-6 flex items-center gap-2.5 text-sm font-semibold uppercase tracking-wider text-zinc-400">
+              <Award className="size-4 text-primary" aria-hidden="true" />
               Certifications
-            </motion.h3>
+            </h3>
+          </Reveal>
 
-            <motion.div className="grid md:grid-cols-3 gap-6">
-              {certifications.map((cert, index) => (
-                <motion.article
-                  key={cert.id}
-                  className="relative p-6 rounded-2xl group"
-                  style={{
-                    background: "rgba(15, 23, 42, 0.6)",
-                    border: "1px solid rgba(148, 163, 184, 0.1)",
-                    backdropFilter: "blur(10px)",
-                  }}
-                  whileHover={{ borderColor: "rgba(245, 158, 11, 0.5)", y: -4 }}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1, duration: reducedMotion ? 0 : 0.5 }}
-                >
-                  <div className="flex items-start gap-3 mb-4">
-                    <motion.div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                      style={{
-                        background: cert.status === "in-progress"
-                          ? "rgba(245, 158, 11, 0.15)"
-                          : "rgba(34, 197, 94, 0.15)",
-                        border: cert.status === "in-progress"
-                          ? "1px solid rgba(245, 158, 11, 0.2)"
-                          : "1px solid rgba(34, 197, 94, 0.2)",
-                      }}
-                    >
-                      {cert.status === "in-progress" ? (
-                        <Clock className="w-5 h-5" style={{ color: "#f59e0b" }} />
-                      ) : (
-                        <CheckCircle className="w-5 h-5" style={{ color: "#22c55e" }} />
-                      )}
-                    </motion.div>
-                    <div className="flex-1">
-                      <motion.h4 className="font-semibold text-white">{cert.name}</motion.h4>
-                      <motion.p className="text-zinc-500 text-sm">{cert.issuer}</motion.p>
-                    </div>
-                  </div>
-                  <motion.div className="flex items-center justify-between">
-                    <motion.span
-                      className="px-2.5 py-1 rounded-full text-xs font-medium"
-                      style={{
-                        background: cert.status === "in-progress"
-                          ? "rgba(245, 158, 11, 0.2)"
-                          : "rgba(34, 197, 94, 0.2)",
-                        color: cert.status === "in-progress" ? "#f59e0b" : "#22c55e",
-                      }}
-                    >
-                      {cert.status === "in-progress" ? "In Progress" : cert.year}
-                    </motion.span>
-                  </motion.div>
-                </motion.article>
-              ))}
-            </motion.div>
-          </motion.div>
-
-          <motion.div className="relative">
-            <motion.h3 className="text-lg font-semibold text-white mb-8 flex items-center gap-3">
-              <Target className="w-5 h-5" style={{ color: "#ec4899" }} />
-              Learning Roadmap
-            </motion.h3>
-
-            <motion.div className="space-y-8">
-              {Object.entries(learningRoadmap).map(([phase, items], phaseIndex) => (
-                <motion.div
-                  key={phase}
-                  className="relative p-6 rounded-2xl"
-                  style={{
-                    background: "rgba(15, 23, 42, 0.6)",
-                    border: "1px solid rgba(148, 163, 184, 0.1)",
-                    backdropFilter: "blur(10px)",
-                  }}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: phaseIndex * 0.1, duration: reducedMotion ? 0 : 0.5 }}
-                >
-                  <motion.div className="flex items-center gap-3 mb-4">
-                    <motion.div
-                      className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
-                      style={{
-                        background: "rgba(236, 72, 153, 0.15)",
-                        border: "1px solid rgba(236, 72, 153, 0.2)",
-                      }}
-                    >
-                      <TrendingUp className="w-5 h-5" style={{ color: "#ec4899" }} />
-                    </motion.div>
-                    <motion.h4 className="text-lg font-semibold text-white capitalize">{phase.replace("-", " ")}</motion.h4>
-                  </motion.div>
-
-                  <motion.div className="flex flex-wrap gap-2">
-                    {items.map((item, i) => (
-                      <motion.span
-                        key={item}
-                        className="px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-300"
-                        style={{
-                          background: "rgba(236, 72, 153, 0.1)",
-                          color: "#ec4899",
-                          border: "1px solid rgba(236, 72, 153, 0.2)",
-                        }}
-                        whileHover={{ scale: 1.05, background: "rgba(236, 72, 153, 0.2)" }}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: i * 0.05, duration: reducedMotion ? 0 : 0.3 }}
+          <ul className="space-y-4">
+            {certifications.map((cert, i) => {
+              const inProgress = cert.status === "in-progress";
+              return (
+                <li key={cert.id}>
+                  <Reveal delay={i * 0.08}>
+                    <article className="card flex items-start gap-4 p-5">
+                      <span
+                        className={`flex size-10 shrink-0 items-center justify-center rounded-xl ${
+                          inProgress ? "bg-amber-400/10 text-amber-300" : "bg-emerald-400/10 text-emerald-300"
+                        }`}
                       >
-                        {item}
-                      </motion.span>
-                    ))}
-                  </motion.div>
-
-                  {phaseIndex < Object.keys(learningRoadmap).length - 1 && (
-                    <motion.div className="absolute right-6 md:right-8 top-1/2 -translate-y-1/2 hidden md:block">
-                      <motion.div
-                        className="w-[2px] h-16"
-                        style={{ background: "linear-gradient(to bottom, #ec4899, transparent)" }}
-                        animate={{ scaleY: reducedMotion ? 1 : [1, 0.5, 1] }}
-                        transition={{ duration: reducedMotion ? 0 : 2, repeat: Infinity }}
-                      />
-                    </motion.div>
-                  )}
-                </motion.div>
-              ))}
-            </motion.div>
-          </motion.div>
-        </motion.div>
+                        {inProgress ? (
+                          <Clock className="size-5" aria-hidden="true" />
+                        ) : (
+                          <CheckCircle className="size-5" aria-hidden="true" />
+                        )}
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <h4 className="font-semibold leading-snug text-white">{cert.name}</h4>
+                        <p className="mt-0.5 text-sm text-zinc-500">{cert.issuer}</p>
+                      </div>
+                      <span className="font-mono text-xs text-zinc-500">{cert.year}</span>
+                    </article>
+                  </Reveal>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </div>
-    </section>
+
+      <div className="mt-16">
+        <Reveal>
+          <h3 className="mb-6 text-sm font-semibold uppercase tracking-wider text-zinc-400">Learning roadmap</h3>
+        </Reveal>
+
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {Object.entries(learningRoadmap).map(([phase, items], i) => (
+            <Reveal key={phase} delay={i * 0.08}>
+              <article className="card h-full p-6">
+                <p className="font-mono text-xs text-primary">{String(i + 1).padStart(2, "0")}</p>
+                <h4 className="mt-2 text-lg font-semibold text-white">{phaseLabels[phase] ?? phase}</h4>
+                <ul className="mt-4 flex flex-wrap gap-2">
+                  {items.map((item) => (
+                    <li key={item} className="chip">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </Section>
   );
 }

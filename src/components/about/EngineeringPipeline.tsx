@@ -1,216 +1,176 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useRef, useState } from "react";
-import { useIntersectionObserver, useReducedMotion } from "@/hooks";
+import { ArrowRight, Brain, Cpu, Database, HardDrive, Search, Sparkles, Terminal } from "lucide-react";
+import { Reveal, Section, SectionHeading } from "@/components/ui/Section";
+import { Button } from "@/components/ui/Button";
 import { engineeringPipeline } from "@/data/resume";
-import { ChevronDown, Sparkles, Database, Cpu, HardDrive, Search, Brain, Terminal } from "lucide-react";
 
-const stageIcons: Record<string, React.ComponentType<{ className?: string; style?: React.CSSProperties }>> = {
+const stageIcons: Record<string, React.ComponentType<{ className?: string }>> = {
   "raw-data": Database,
-  "processing": Cpu,
-  "embeddings": Sparkles,
+  processing: Cpu,
+  embeddings: Sparkles,
   "vector-db": HardDrive,
-  "retrieval": Search,
+  retrieval: Search,
   "ml-llm": Brain,
-  "response": Terminal,
+  response: Terminal,
 };
 
-const stageColors: Record<string, string> = {
-  "raw-data": "#06b6d4",
-  "processing": "#06b6d4",
-  "embeddings": "#8b5cf6",
-  "vector-db": "#8b5cf6",
-  "retrieval": "#ec4899",
-  "ml-llm": "#ec4899",
-  "response": "#22c55e",
-};
+const total = engineeringPipeline.length;
 
 export function EngineeringPipeline() {
-  const reducedMotion = useReducedMotion();
-  const { ref, isIntersecting } = useIntersectionObserver({ threshold: 0.1 });
-  const [hoveredStage, setHoveredStage] = useState<string | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollY } = useScroll();
-  const scrollX = useTransform(scrollY, [0, 2000], [0, -100]);
+  const reduce = useReducedMotion();
+  const [active, setActive] = useState(0);
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  const stage = engineeringPipeline[active];
+  const Icon = stageIcons[stage.id] ?? Database;
+
+  const select = (index: number, focus = false) => {
+    const next = (index + total) % total;
+    setActive(next);
+    if (focus) tabRefs.current[next]?.focus();
+  };
+
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    switch (e.key) {
+      case "ArrowDown":
+      case "ArrowRight":
+        e.preventDefault();
+        select(active + 1, true);
+        break;
+      case "ArrowUp":
+      case "ArrowLeft":
+        e.preventDefault();
+        select(active - 1, true);
+        break;
+      case "Home":
+        e.preventDefault();
+        select(0, true);
+        break;
+      case "End":
+        e.preventDefault();
+        select(total - 1, true);
+        break;
+    }
+  };
 
   return (
-    <section
-      ref={ref}
-      id="pipeline"
-      className="relative py-24 md:py-32 px-6 overflow-hidden"
-      aria-labelledby="pipeline-heading"
-    >
-      <div className="max-w-7xl mx-auto">
-        <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: isIntersecting ? 1 : 0, y: 0 }}
-          transition={{ duration: reducedMotion ? 0 : 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-        >
-          <motion.span
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium tracking-wider uppercase"
-            style={{
-              background: "rgba(236, 72, 153, 0.1)",
-              border: "1px solid rgba(236, 72, 153, 0.3)",
-              color: "#ec4899",
-            }}
-          >
-            Engineering Pipeline
-          </motion.span>
-          <h2
-            id="pipeline-heading"
-            className="mt-6 text-4xl md:text-5xl font-bold tracking-tight text-white leading-[1.1]"
-          >
-            End-to-End <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-violet-500">AI Data Pipeline</span>
-          </h2>
-          <p className="mt-4 text-zinc-400 max-w-2xl mx-auto">
-            From raw data ingestion to intelligent response generation — each stage transforms information into actionable intelligence.
-          </p>
-        </motion.div>
+    <Section id="pipeline" labelledBy="pipeline-heading">
+      <SectionHeading
+        id="pipeline-heading"
+        index="02"
+        eyebrow="Engineering pipeline"
+        title="End-to-end"
+        highlight="AI data pipeline"
+        description="From raw data ingestion to intelligent response generation — select a stage to see how it works and the tools I use."
+      />
 
-        <motion.div
-          ref={containerRef}
-          className="relative"
-          style={{
-            transform: reducedMotion ? undefined : `translateX(${scrollX.get()}px)`,
-          }}
-        >
-          <div className="flex items-center gap-4 overflow-x-auto pb-8 snap-x" style={{ scrollSnapType: "x mandatory" }}>
-            {engineeringPipeline.map((stage, index) => {
-              const color = stageColors[stage.id] || "#06b6d4";
-              const Icon = stageIcons[stage.id] || Database;
+      <Reveal>
+        <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
+          <div
+            role="tablist"
+            aria-label="Pipeline stages"
+            aria-orientation="vertical"
+            onKeyDown={onKeyDown}
+            className="scrollbar-hide -mx-5 flex gap-2 overflow-x-auto px-5 pb-1 sm:-mx-8 sm:px-8 lg:mx-0 lg:flex-col lg:overflow-visible lg:px-0 lg:pb-0"
+          >
+            {engineeringPipeline.map((s, i) => {
+              const isActive = i === active;
               return (
-                <motion.div
-                  key={stage.id}
-                  className="relative flex flex-col items-center min-w-[280px] max-w-[320px] snap-center"
-                  onMouseEnter={() => setHoveredStage(stage.id)}
-                  onMouseLeave={() => setHoveredStage(null)}
+                <button
+                  key={s.id}
+                  ref={(el) => {
+                    tabRefs.current[i] = el;
+                  }}
+                  role="tab"
+                  type="button"
+                  id={`stage-tab-${s.id}`}
+                  aria-selected={isActive}
+                  aria-controls="pipeline-panel"
+                  tabIndex={isActive ? 0 : -1}
+                  onClick={() => select(i)}
+                  className={`flex shrink-0 items-center gap-3 rounded-xl border px-4 py-3 text-left transition-colors lg:shrink ${
+                    isActive
+                      ? "border-primary/40 bg-primary/10 text-white"
+                      : "border-white/10 bg-white/[0.02] text-zinc-400 hover:border-white/20 hover:text-zinc-200"
+                  }`}
                 >
-                  <motion.div
-                    className="relative flex flex-col items-center z-10"
-                    animate={{
-                      scale: hoveredStage === stage.id ? 1.05 : 1,
-                      y: hoveredStage === stage.id ? -8 : 0,
-                    }}
-                    transition={{ duration: reducedMotion ? 0 : 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  <span
+                    className={`font-mono text-xs ${isActive ? "text-primary" : "text-zinc-600"}`}
+                    aria-hidden="true"
                   >
-                    <motion.div
-                      className="relative flex items-center justify-center mb-4"
-                      style={{
-                        width: 80,
-                        height: 80,
-                        borderRadius: "50%",
-                        background: `rgba(${hexToRgb(color).join(",")}, 0.15)`,
-                        border: `1px solid ${color}40`,
-                      }}
-                      animate={{
-                        boxShadow: hoveredStage === stage.id
-                          ? `0 0 40px ${color}60, 0 0 80px ${color}30`
-                          : "none",
-                        borderColor: hoveredStage === stage.id ? color : `${color}40`,
-                      }}
-                      transition={{ duration: reducedMotion ? 0 : 0.3 }}
-                    >
-                      <Icon
-                        className="w-10 h-10"
-                        style={{ color }}
-                        aria-hidden="true"
-                      />
-                      {hoveredStage === stage.id && !reducedMotion && (
-                        <motion.div
-                          className="absolute inset-0 rounded-full"
-                          animate={{ scale: [1, 1.3], opacity: [0.4, 0] }}
-                          transition={{ duration: 1.5, repeat: Infinity, ease: "easeOut" }}
-                          style={{
-                            border: `2px solid ${color}`,
-                            borderRadius: "50%",
-                          }}
-                        />
-                      )}
-                    </motion.div>
-
-                    <motion.h3 className="text-lg font-semibold text-white text-center mb-2">
-                      {stage.label}
-                    </motion.h3>
-                    <motion.p className="text-zinc-500 text-sm text-center px-2">
-                      {stage.description}
-                    </motion.p>
-                  </motion.div>
-
-                  {hoveredStage === stage.id && (
-                    <motion.div
-                      className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-80 z-20"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 10 }}
-                      transition={{ duration: reducedMotion ? 0 : 0.2 }}
-                    >
-                      <motion.div
-                        className="p-4 rounded-xl"
-                        style={{
-                          background: "rgba(15, 23, 42, 0.95)",
-                          border: `1px solid ${color}40`,
-                          backdropFilter: "blur(20px)",
-                          boxShadow: `0 20px 40px -20px ${color}40`,
-                        }}
-                      >
-                        <motion.p className="text-zinc-300 text-sm leading-relaxed mb-4">
-                          {stage.description}
-                        </motion.p>
-                        <motion.div className="flex flex-wrap gap-2">
-                          {stage.tech.map((t, i) => (
-                            <motion.span
-                              key={i}
-                              className="px-2.5 py-1 rounded-full text-xs font-medium"
-                              style={{
-                                background: `rgba(${hexToRgb(color).join(",")}, 0.15)`,
-                                color,
-                                border: `1px solid ${color}30`,
-                              }}
-                              initial={{ opacity: 0, scale: 0.8 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              transition={{ delay: i * 0.05, duration: reducedMotion ? 0 : 0.2 }}
-                            >
-                              {t}
-                            </motion.span>
-                          ))}
-                        </motion.div>
-                      </motion.div>
-                      <motion.div
-                        className="absolute top-[-8px] left-1/2 -translate-x-1/2 w-3 h-3 rotate-45"
-                        style={{ background: "rgba(15, 23, 42, 0.95)", borderLeft: `1px solid ${color}40`, borderTop: `1px solid ${color}40` }}
-                      />
-                    </motion.div>
-                  )}
-
-                  {index < engineeringPipeline.length - 1 && (
-                    <motion.div
-                      className="absolute top-[40px] left-full right-[50%] h-[2px] flex items-center"
-                      style={{
-                        background: `linear-gradient(90deg, ${color}40, ${stageColors[engineeringPipeline[index + 1].id] || "#06b6d4"}40)`,
-                      }}
-                    >
-                      <ChevronDown
-                        className="w-4 h-4 mx-2 flex-shrink-0"
-                        style={{ color }}
-                        aria-hidden="true"
-                      />
-                    </motion.div>
-                  )}
-                </motion.div>
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="whitespace-nowrap text-sm font-medium tracking-wide">{s.label}</span>
+                </button>
               );
             })}
           </div>
-        </motion.div>
-      </div>
-    </section>
-  );
-}
 
-function hexToRgb(hex: string): [number, number, number] {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result
-    ? [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)]
-    : [6, 182, 212];
+          <div
+            role="tabpanel"
+            id="pipeline-panel"
+            aria-labelledby={`stage-tab-${stage.id}`}
+            className="card min-h-[320px] p-7 md:p-10"
+          >
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={stage.id}
+                initial={reduce ? false : { opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={reduce ? undefined : { opacity: 0, y: -6 }}
+                transition={{ duration: 0.22 }}
+              >
+                <div className="flex items-center gap-4">
+                  <span className="flex size-14 items-center justify-center rounded-2xl border border-primary/25 bg-primary/10 text-primary">
+                    <Icon className="size-7" aria-hidden="true" />
+                  </span>
+                  <div>
+                    <p className="font-mono text-xs uppercase tracking-[0.2em] text-zinc-500">
+                      Stage {String(active + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+                    </p>
+                    <h3 className="mt-1 text-2xl font-semibold tracking-tight text-white">{stage.label}</h3>
+                  </div>
+                </div>
+
+                <p className="mt-6 max-w-xl text-lg leading-relaxed text-zinc-300">{stage.description}</p>
+
+                <p className="mt-8 text-xs uppercase tracking-wider text-zinc-500">Tools & techniques</p>
+                <ul className="mt-3 flex flex-wrap gap-2">
+                  {stage.tech.map((t) => (
+                    <li key={t} className="chip chip-primary">
+                      {t}
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            </AnimatePresence>
+
+            <div className="mt-10 flex items-center justify-between gap-6 border-t border-white/10 pt-6">
+              <div className="flex flex-1 gap-1.5" aria-hidden="true">
+                {engineeringPipeline.map((s, i) => (
+                  <span
+                    key={s.id}
+                    className={`h-1 flex-1 rounded-full transition-colors duration-300 ${
+                      i <= active ? "bg-primary" : "bg-white/10"
+                    }`}
+                  />
+                ))}
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => select(active + 1)}
+                iconRight={<ArrowRight className="size-4" aria-hidden="true" />}
+              >
+                {active === total - 1 ? "Start over" : "Next stage"}
+              </Button>
+            </div>
+          </div>
+        </div>
+      </Reveal>
+    </Section>
+  );
 }
