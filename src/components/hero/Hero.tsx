@@ -1,7 +1,9 @@
 "use client";
 
+import Image from "next/image";
+import { useState } from "react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
-import { ArrowRight, Check, Mail, MapPin } from "lucide-react";
+import { ArrowRight, Mail, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { GitHubIcon } from "@/components/ui/Icons";
 import { personalInfo } from "@/data/resume";
@@ -22,16 +24,9 @@ const stats = [
   { value: "6", label: "Programming languages" },
 ];
 
-const steps = [
-  { label: "Render", detail: "React + TypeScript UI" },
-  { label: "Authenticate", detail: "OIDC session · JWT" },
-  { label: "Validate", detail: "Go API · request validation" },
-  { label: "Authorize", detail: "RBAC · tenant scope" },
-  { label: "Query", detail: "PostgreSQL · row-level security" },
-];
-
 export function Hero() {
   const reduce = useReducedMotion();
+  const [photoFailed, setPhotoFailed] = useState(false);
 
   return (
     <section
@@ -39,7 +34,7 @@ export function Hero() {
       aria-labelledby="hero-heading"
       className="relative flex min-h-dvh items-center px-5 pb-16 pt-28 sm:px-8"
     >
-      <div className="mx-auto grid w-full max-w-6xl items-center gap-14 lg:grid-cols-[1.15fr_0.85fr] lg:gap-10">
+      <div className="mx-auto grid w-full max-w-6xl items-center gap-14 lg:grid-cols-[1.15fr_0.85fr] lg:gap-12">
         <motion.div
           variants={container}
           initial={reduce ? false : "hidden"}
@@ -63,7 +58,7 @@ export function Hero() {
           <motion.h1
             id="hero-heading"
             variants={item}
-            className="mt-3 text-balance text-5xl font-semibold leading-[1.04] tracking-tight text-white sm:text-6xl lg:text-7xl"
+            className="mt-3 text-balance text-5xl font-semibold leading-[1.04] tracking-tight text-white sm:text-6xl lg:text-[4.25rem]"
           >
             I build full-stack products — <span className="text-gradient">from React to Go to AI.</span>
           </motion.h1>
@@ -115,62 +110,72 @@ export function Hero() {
         </motion.div>
 
         <motion.div
-          initial={reduce ? false : { opacity: 0, y: 28 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          className="relative min-w-0"
-          aria-label="Simplified request flow illustration"
+          initial={reduce ? false : { opacity: 0, y: 28, scale: 0.97 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          className="relative mx-auto w-full max-w-sm min-w-0 lg:max-w-md"
         >
           <div
-            className="absolute -inset-6 -z-10 rounded-[2rem] opacity-70 blur-3xl"
+            className="absolute -inset-8 -z-10 rounded-[3rem] opacity-80 blur-3xl"
             style={{
               background:
-                "radial-gradient(60% 60% at 30% 20%, rgba(34,211,238,0.22), transparent 70%), radial-gradient(60% 60% at 80% 80%, rgba(129,140,248,0.2), transparent 70%)",
+                "radial-gradient(60% 55% at 25% 15%, rgba(34,211,238,0.28), transparent 70%), radial-gradient(60% 60% at 85% 85%, rgba(129,140,248,0.26), transparent 70%)",
             }}
             aria-hidden="true"
           />
 
-          <div className="card overflow-hidden bg-zinc-900/70 backdrop-blur-md">
-            <div className="flex items-center justify-between border-b border-white/10 px-5 py-3">
-              <div className="flex items-center gap-2" aria-hidden="true">
-                <span className="size-2.5 rounded-full bg-zinc-700" />
-                <span className="size-2.5 rounded-full bg-zinc-700" />
-                <span className="size-2.5 rounded-full bg-zinc-700" />
-              </div>
-              <span className="font-mono text-xs text-zinc-500">request_flow</span>
-              <span className="chip chip-primary">illustrative</span>
-            </div>
+          <div
+            className="absolute inset-0 translate-x-3 translate-y-3 rounded-[2rem] border border-primary/25 sm:translate-x-4 sm:translate-y-4"
+            aria-hidden="true"
+          />
 
-            <div className="px-5 pb-5 pt-4 font-mono text-sm">
-              <p className="text-zinc-500">
-                <span className="text-primary">$</span> request{" "}
-                <span className="text-zinc-300">&quot;tenant user action&quot;</span>
-              </p>
+          <div
+            className="relative rounded-[2rem] p-px"
+            style={{
+              background:
+                "linear-gradient(135deg, rgba(34,211,238,0.7), rgba(255,255,255,0.08) 40%, rgba(129,140,248,0.6))",
+            }}
+          >
+            <div className="relative aspect-[4/5] overflow-hidden rounded-[calc(2rem-1px)] bg-zinc-900">
+              {photoFailed ? (
+                <div
+                  className="flex size-full items-center justify-center"
+                  role="img"
+                  aria-label={`Monogram of ${personalInfo.name}`}
+                >
+                  <span className="text-gradient font-mono text-7xl font-semibold">RW</span>
+                </div>
+              ) : (
+                <Image
+                  src="/profile.jpg"
+                  alt={`Portrait of ${personalInfo.name}`}
+                  fill
+                  preload
+                  sizes="(max-width: 1024px) 85vw, 448px"
+                  className="object-cover object-top"
+                  onError={() => setPhotoFailed(true)}
+                />
+              )}
 
-              <ol className="mt-5 space-y-3">
-                {steps.map((step, i) => (
-                  <motion.li
-                    key={step.label}
-                    className="flex items-center gap-3 rounded-xl border border-white/5 bg-black/20 px-3.5 py-3"
-                    initial={reduce ? false : { opacity: 0, x: 14 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.8 + i * 0.22, duration: 0.45 }}
-                  >
-                    <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary">
-                      <Check className="size-3.5" aria-hidden="true" />
-                    </span>
-                    <span className="w-24 shrink-0 text-white">{step.label}</span>
-                    <span className="truncate text-xs text-zinc-500">{step.detail}</span>
-                  </motion.li>
-                ))}
-              </ol>
+              <div
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2"
+                style={{ background: "linear-gradient(to top, rgba(9,9,11,0.85), transparent)" }}
+                aria-hidden="true"
+              />
 
-              <div className="mt-5 flex flex-wrap gap-2 border-t border-white/10 pt-4 font-sans">
-                {["React", "TypeScript", "Go", "PostgreSQL", "Docker"].map((t) => (
-                  <span key={t} className="chip">
-                    {t}
-                  </span>
-                ))}
+              <div className="absolute inset-x-4 bottom-4 rounded-2xl border border-white/15 bg-zinc-950/55 p-4 backdrop-blur-md">
+                <p className="text-base font-semibold tracking-tight text-white">{personalInfo.name}</p>
+                <p className="mt-0.5 text-sm text-zinc-300">Full Stack Web Developer</p>
+                <ul className="mt-3 flex flex-wrap gap-1.5" aria-label="Core technologies">
+                  {["React", "TypeScript", "Go", "PostgreSQL"].map((t) => (
+                    <li
+                      key={t}
+                      className="rounded-full border border-white/10 bg-white/10 px-2.5 py-1 text-[0.7rem] font-medium leading-none text-zinc-100"
+                    >
+                      {t}
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           </div>

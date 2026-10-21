@@ -43,11 +43,20 @@ export const metadata: Metadata = {
     title,
     description,
     siteName: "Rahul Anand Wali",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Rahul Anand Wali — Full Stack Web Developer",
+      },
+    ],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title,
     description,
+    images: ["/og-image.jpg"],
   },
 };
 
