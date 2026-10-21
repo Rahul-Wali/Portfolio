@@ -24,7 +24,7 @@ export function Footer() {
               <span className="font-semibold tracking-tight text-white">{personalInfo.name}</span>
             </div>
             <p className="mt-3 max-w-sm text-sm leading-relaxed text-zinc-500">
-              Python Engineer · Data & GenAI Engineering · Vector Databases & RAG Pipelines
+              Full Stack Web Developer · React / TypeScript · Go / Python · AI Applications
             </p>
           </div>
 

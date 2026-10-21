@@ -2,14 +2,7 @@
 
 import { Award, CheckCircle, Clock, GraduationCap } from "lucide-react";
 import { Reveal, Section, SectionHeading } from "@/components/ui/Section";
-import { certifications, education, learningRoadmap } from "@/data/resume";
-
-const phaseLabels: Record<string, string> = {
-  foundation: "Foundation",
-  next: "Up next",
-  cloud: "Cloud",
-  engineering: "Engineering",
-};
+import { certifications, education } from "@/data/resume";
 
 export function Education() {
   return (
@@ -17,10 +10,10 @@ export function Education() {
       <SectionHeading
         id="education-heading"
         index="06"
-        eyebrow="Education & growth"
+        eyebrow="Education"
         title="Academic"
         highlight="foundation"
-        description="Formal education, certifications, and where I'm headed next."
+        description="Formal education and certifications."
       />
 
       <div className="grid gap-8 lg:grid-cols-5">
@@ -102,37 +95,13 @@ export function Education() {
                         <h4 className="font-semibold leading-snug text-white">{cert.name}</h4>
                         <p className="mt-0.5 text-sm text-zinc-500">{cert.issuer}</p>
                       </div>
-                      <span className="font-mono text-xs text-zinc-500">{cert.year}</span>
+                      {inProgress && <span className="chip">In progress</span>}
                     </article>
                   </Reveal>
                 </li>
               );
             })}
           </ul>
-        </div>
-      </div>
-
-      <div className="mt-16">
-        <Reveal>
-          <h3 className="mb-6 text-sm font-semibold uppercase tracking-wider text-zinc-400">Learning roadmap</h3>
-        </Reveal>
-
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {Object.entries(learningRoadmap).map(([phase, items], i) => (
-            <Reveal key={phase} delay={i * 0.08}>
-              <article className="card h-full p-6">
-                <p className="font-mono text-xs text-primary">{String(i + 1).padStart(2, "0")}</p>
-                <h4 className="mt-2 text-lg font-semibold text-white">{phaseLabels[phase] ?? phase}</h4>
-                <ul className="mt-4 flex flex-wrap gap-2">
-                  {items.map((item) => (
-                    <li key={item} className="chip">
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            </Reveal>
-          ))}
         </div>
       </div>
     </Section>

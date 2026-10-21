@@ -8,13 +8,13 @@ import { SocialIcon } from "@/components/ui/Icons";
 import { personalInfo, socialLinks } from "@/data/resume";
 
 const focusAreas = [
-  "Python Engineering",
-  "Data Engineering",
-  "GenAI / LLM Applications",
-  "RAG Pipelines",
-  "Vector Databases",
-  "ML / NLP",
-  "Cloud Data Platforms",
+  "Full-stack Web Development",
+  "React / TypeScript",
+  "Go Services",
+  "Python",
+  "PostgreSQL",
+  "Auth & Multi-tenancy",
+  "AI Applications / RAG",
 ];
 
 const displayValue: Record<string, string> = {
@@ -48,8 +48,8 @@ export function Contact() {
         index="07"
         eyebrow="Get in touch"
         title="Let's build something"
-        highlight="intelligent"
-        description="Open to opportunities in Python, Data Engineering, GenAI and AI-focused engineering roles."
+        highlight="great together"
+        description="Open to full-stack, React / TypeScript, Go / Python and AI application engineering roles."
       />
 
       <div className="grid gap-6 lg:grid-cols-5">
@@ -62,8 +62,8 @@ export function Contact() {
             />
 
             <p className="relative max-w-lg text-lg leading-relaxed text-zinc-300">
-              Whether you&apos;re building a RAG pipeline, designing a vector search architecture, or scaling data
-              infrastructure — I&apos;d love to hear about your challenges.
+              Whether you&apos;re building a multi-tenant platform, a React front end, a Go back end, or an
+              AI-powered feature — I&apos;d love to hear about it.
             </p>
 
             <div className="relative mt-8 flex flex-wrap items-center gap-3">
@@ -103,7 +103,7 @@ export function Contact() {
                 <p className="mt-1.5 text-sm leading-relaxed text-zinc-500">
                   {personalInfo.availability.cities.join(" · ")}
                   <br />
-                  Open to relocation · US EST overlap available
+                  US EST overlap available
                 </p>
               </div>
 

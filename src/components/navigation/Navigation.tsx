@@ -16,7 +16,7 @@ const navItems = [
   { href: "#contact", label: "Contact" },
 ];
 
-const sectionIds = ["home", "about", "pipeline", "experience", "projects", "skills", "education", "contact"];
+const sectionIds = ["home", "about", "architecture", "experience", "projects", "skills", "education", "contact"];
 
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -42,7 +42,7 @@ export function Navigation() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setActive(entry.target.id === "pipeline" ? "about" : entry.target.id);
+            setActive(entry.target.id === "architecture" ? "about" : entry.target.id);
           }
         });
       },

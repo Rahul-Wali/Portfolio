@@ -2,19 +2,18 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useRef, useState } from "react";
-import { ArrowRight, Brain, Cpu, Database, HardDrive, Search, Sparkles, Terminal } from "lucide-react";
+import { ArrowRight, Brain, Database, Monitor, Server, ShieldCheck, Terminal } from "lucide-react";
 import { Reveal, Section, SectionHeading } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
 import { engineeringPipeline } from "@/data/resume";
 
-const stageIcons: Record<string, React.ComponentType<{ className?: string }>> = {
-  "raw-data": Database,
-  processing: Cpu,
-  embeddings: Sparkles,
-  "vector-db": HardDrive,
-  retrieval: Search,
-  "ml-llm": Brain,
-  response: Terminal,
+const layerIcons: Record<string, React.ComponentType<{ className?: string }>> = {
+  frontend: Monitor,
+  auth: ShieldCheck,
+  backend: Server,
+  data: Database,
+  quality: Terminal,
+  ai: Brain,
 };
 
 const total = engineeringPipeline.length;
@@ -24,8 +23,8 @@ export function EngineeringPipeline() {
   const [active, setActive] = useState(0);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
-  const stage = engineeringPipeline[active];
-  const Icon = stageIcons[stage.id] ?? Database;
+  const layer = engineeringPipeline[active];
+  const Icon = layerIcons[layer.id] ?? Server;
 
   const select = (index: number, focus = false) => {
     const next = (index + total) % total;
@@ -57,21 +56,21 @@ export function EngineeringPipeline() {
   };
 
   return (
-    <Section id="pipeline" labelledBy="pipeline-heading">
+    <Section id="architecture" labelledBy="architecture-heading">
       <SectionHeading
-        id="pipeline-heading"
+        id="architecture-heading"
         index="02"
-        eyebrow="Engineering pipeline"
-        title="End-to-end"
-        highlight="AI data pipeline"
-        description="From raw data ingestion to intelligent response generation — select a stage to see how it works and the tools I use."
+        eyebrow="Full-stack architecture"
+        title="How I build"
+        highlight="across the stack"
+        description="From the browser to the database — select a layer to see how I approach it and the tools I use."
       />
 
       <Reveal>
         <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
           <div
             role="tablist"
-            aria-label="Pipeline stages"
+            aria-label="Architecture layers"
             aria-orientation="vertical"
             onKeyDown={onKeyDown}
             className="scrollbar-hide -mx-5 flex gap-2 overflow-x-auto px-5 pb-1 sm:-mx-8 sm:px-8 lg:mx-0 lg:flex-col lg:overflow-visible lg:px-0 lg:pb-0"
@@ -86,9 +85,9 @@ export function EngineeringPipeline() {
                   }}
                   role="tab"
                   type="button"
-                  id={`stage-tab-${s.id}`}
+                  id={`layer-tab-${s.id}`}
                   aria-selected={isActive}
-                  aria-controls="pipeline-panel"
+                  aria-controls="architecture-panel"
                   tabIndex={isActive ? 0 : -1}
                   onClick={() => select(i)}
                   className={`flex shrink-0 items-center gap-3 rounded-xl border px-4 py-3 text-left transition-colors lg:shrink ${
@@ -111,13 +110,13 @@ export function EngineeringPipeline() {
 
           <div
             role="tabpanel"
-            id="pipeline-panel"
-            aria-labelledby={`stage-tab-${stage.id}`}
+            id="architecture-panel"
+            aria-labelledby={`layer-tab-${layer.id}`}
             className="card min-h-[320px] p-7 md:p-10"
           >
             <AnimatePresence mode="wait">
               <motion.div
-                key={stage.id}
+                key={layer.id}
                 initial={reduce ? false : { opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={reduce ? undefined : { opacity: 0, y: -6 }}
@@ -129,17 +128,17 @@ export function EngineeringPipeline() {
                   </span>
                   <div>
                     <p className="font-mono text-xs uppercase tracking-[0.2em] text-zinc-500">
-                      Stage {String(active + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+                      Layer {String(active + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
                     </p>
-                    <h3 className="mt-1 text-2xl font-semibold tracking-tight text-white">{stage.label}</h3>
+                    <h3 className="mt-1 text-2xl font-semibold tracking-tight text-white">{layer.label}</h3>
                   </div>
                 </div>
 
-                <p className="mt-6 max-w-xl text-lg leading-relaxed text-zinc-300">{stage.description}</p>
+                <p className="mt-6 max-w-xl text-lg leading-relaxed text-zinc-300">{layer.description}</p>
 
                 <p className="mt-8 text-xs uppercase tracking-wider text-zinc-500">Tools & techniques</p>
                 <ul className="mt-3 flex flex-wrap gap-2">
-                  {stage.tech.map((t) => (
+                  {layer.tech.map((t) => (
                     <li key={t} className="chip chip-primary">
                       {t}
                     </li>
@@ -165,7 +164,7 @@ export function EngineeringPipeline() {
                 onClick={() => select(active + 1)}
                 iconRight={<ArrowRight className="size-4" aria-hidden="true" />}
               >
-                {active === total - 1 ? "Start over" : "Next stage"}
+                {active === total - 1 ? "Start over" : "Next layer"}
               </Button>
             </div>
           </div>

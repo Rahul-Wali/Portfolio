@@ -18,16 +18,16 @@ const item: Variants = {
 
 const stats = [
   { value: "8.2", label: "CGPA · BE CSE" },
-  { value: "15 wk", label: "AI & Cloud internship" },
-  { value: "2", label: "End-to-end projects" },
+  { value: "2", label: "Software internships" },
+  { value: "6", label: "Programming languages" },
 ];
 
 const steps = [
-  { label: "Extract", detail: "symptom parsing · fuzzy match" },
-  { label: "Embed", detail: "text → vectors" },
-  { label: "Retrieve", detail: "FAISS nearest neighbours" },
-  { label: "Classify", detail: "Random Forest · top-3" },
-  { label: "Respond", detail: "confidence + severity" },
+  { label: "Render", detail: "React + TypeScript UI" },
+  { label: "Authenticate", detail: "OIDC session · JWT" },
+  { label: "Validate", detail: "Go API · request validation" },
+  { label: "Authorize", detail: "RBAC · tenant scope" },
+  { label: "Query", detail: "PostgreSQL · row-level security" },
 ];
 
 export function Hero() {
@@ -52,7 +52,7 @@ export function Hero() {
                 <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400/70" />
                 <span className="relative inline-flex size-2 rounded-full bg-emerald-400" />
               </span>
-              Open to opportunities · {personalInfo.availability.type}
+              Open to opportunities · {personalInfo.availability.mode}
             </span>
           </motion.div>
 
@@ -65,12 +65,12 @@ export function Hero() {
             variants={item}
             className="mt-3 text-balance text-5xl font-semibold leading-[1.04] tracking-tight text-white sm:text-6xl lg:text-7xl"
           >
-            Building intelligent systems <span className="text-gradient">from data to AI.</span>
+            I build full-stack products — <span className="text-gradient">from React to Go to AI.</span>
           </motion.h1>
 
           <motion.p variants={item} className="mt-6 max-w-xl text-lg leading-relaxed text-zinc-400">
-            Python engineer focused on data engineering, RAG pipelines, vector search and GenAI — turning raw
-            data into reliable retrieval, ranking and analytics workflows.
+            Full Stack Web Developer building multi-tenant platforms and AI-enabled applications with React,
+            TypeScript, Go, Python and PostgreSQL.
           </motion.p>
 
           <motion.div variants={item} className="mt-9 flex flex-wrap items-center gap-3">
@@ -110,7 +110,7 @@ export function Hero() {
 
           <motion.p variants={item} className="mt-6 flex items-center gap-2 text-sm text-zinc-500">
             <MapPin className="size-4" aria-hidden="true" />
-            {personalInfo.location} · Open to relocation
+            {personalInfo.location} · US EST overlap available
           </motion.p>
         </motion.div>
 
@@ -119,7 +119,7 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
           className="relative min-w-0"
-          aria-label="Simplified RAG pipeline illustration"
+          aria-label="Simplified request flow illustration"
         >
           <div
             className="absolute -inset-6 -z-10 rounded-[2rem] opacity-70 blur-3xl"
@@ -137,14 +137,14 @@ export function Hero() {
                 <span className="size-2.5 rounded-full bg-zinc-700" />
                 <span className="size-2.5 rounded-full bg-zinc-700" />
               </div>
-              <span className="font-mono text-xs text-zinc-500">rag_pipeline</span>
+              <span className="font-mono text-xs text-zinc-500">request_flow</span>
               <span className="chip chip-primary">illustrative</span>
             </div>
 
             <div className="px-5 pb-5 pt-4 font-mono text-sm">
               <p className="text-zinc-500">
-                <span className="text-primary">$</span> query{" "}
-                <span className="text-zinc-300">&quot;fever, dry cough, fatigue&quot;</span>
+                <span className="text-primary">$</span> request{" "}
+                <span className="text-zinc-300">&quot;tenant user action&quot;</span>
               </p>
 
               <ol className="mt-5 space-y-3">
@@ -159,14 +159,14 @@ export function Hero() {
                     <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary">
                       <Check className="size-3.5" aria-hidden="true" />
                     </span>
-                    <span className="w-[4.5rem] shrink-0 text-white">{step.label}</span>
+                    <span className="w-24 shrink-0 text-white">{step.label}</span>
                     <span className="truncate text-xs text-zinc-500">{step.detail}</span>
                   </motion.li>
                 ))}
               </ol>
 
               <div className="mt-5 flex flex-wrap gap-2 border-t border-white/10 pt-4 font-sans">
-                {["Python", "FAISS", "scikit-learn", "Streamlit"].map((t) => (
+                {["React", "TypeScript", "Go", "PostgreSQL", "Docker"].map((t) => (
                   <span key={t} className="chip">
                     {t}
                   </span>

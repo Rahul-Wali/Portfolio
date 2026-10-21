@@ -14,23 +14,24 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
-const title = "Rahul Anand Wali | Python Engineer · Data & GenAI Engineer";
+const title = "Rahul Anand Wali | Full Stack Web Developer · React, TypeScript, Go & AI";
 const description =
-  "Portfolio of Rahul Anand Wali — Python Engineer focused on Data Engineering, RAG pipelines, vector search, machine learning and GenAI.";
+  "Portfolio of Rahul Anand Wali — Full Stack Web Developer building multi-tenant platforms and AI-enabled applications with React, TypeScript, Go, Python and PostgreSQL.";
 
 export const metadata: Metadata = {
   title,
   description,
   keywords: [
-    "Python Engineer",
-    "Data Engineering",
-    "GenAI",
-    "RAG Pipelines",
-    "Vector Databases",
-    "FAISS",
-    "Machine Learning",
-    "NLP",
-    "Data Analytics",
+    "Full Stack Developer",
+    "React",
+    "TypeScript",
+    "Go",
+    "Python",
+    "PostgreSQL",
+    "OIDC",
+    "Docker",
+    "AI Applications",
+    "RAG",
     "Portfolio",
   ],
   authors: [{ name: "Rahul Anand Wali" }],

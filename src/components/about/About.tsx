@@ -1,13 +1,14 @@
 "use client";
 
-import { Brain, Database, GraduationCap, MapPin, Search, Sparkles } from "lucide-react";
+import { Brain, Database, GraduationCap, MapPin, Monitor, ShieldCheck, Sparkles } from "lucide-react";
 import { Reveal, Section, SectionHeading } from "@/components/ui/Section";
 import { aboutCards } from "@/data/skills";
 import { personalInfo, philosophy, summary } from "@/data/resume";
 
 const cardIcons = {
+  monitor: Monitor,
+  shield: ShieldCheck,
   database: Database,
-  search: Search,
   brain: Brain,
 };
 
@@ -17,7 +18,7 @@ const facts = [
   {
     icon: Sparkles,
     label: "Availability",
-    value: `${personalInfo.availability.type} · open to relocation`,
+    value: personalInfo.availability.type,
   },
 ];
 
@@ -28,8 +29,8 @@ export function About() {
         id="about-heading"
         index="01"
         eyebrow="About"
-        title="Working across the"
-        highlight="data lifecycle"
+        title="Building across the"
+        highlight="full stack"
         description={philosophy}
       />
 
@@ -57,12 +58,12 @@ export function About() {
         </Reveal>
       </div>
 
-      <div className="mt-6 grid gap-6 md:grid-cols-3">
+      <div className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {aboutCards.map((card, index) => {
           const Icon = cardIcons[card.icon as keyof typeof cardIcons] ?? Database;
           return (
-            <Reveal key={card.id} delay={index * 0.1}>
-              <article className="card card-hover h-full p-7">
+            <Reveal key={card.id} delay={index * 0.08}>
+              <article className="card card-hover h-full p-6">
                 <div className="flex items-center justify-between">
                   <span
                     className="flex size-11 items-center justify-center rounded-xl"
@@ -73,7 +74,7 @@ export function About() {
                   <span className="font-mono text-xs text-zinc-600">{card.number}</span>
                 </div>
 
-                <h3 className="mt-6 text-lg font-semibold tracking-wide text-white">{card.label}</h3>
+                <h3 className="mt-6 text-base font-semibold tracking-wide text-white">{card.label}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-zinc-400">{card.description}</p>
 
                 <ul className="mt-5 space-y-2.5 border-t border-white/10 pt-5">
