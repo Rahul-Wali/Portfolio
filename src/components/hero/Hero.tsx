@@ -166,16 +166,6 @@ export function Hero() {
               <div className="absolute inset-x-4 bottom-4 rounded-2xl border border-white/15 bg-zinc-950/55 p-4 backdrop-blur-md">
                 <p className="text-base font-semibold tracking-tight text-white">{personalInfo.name}</p>
                 <p className="mt-0.5 text-sm text-zinc-300">Full Stack Web Developer</p>
-                <ul className="mt-3 flex flex-wrap gap-1.5" aria-label="Core technologies">
-                  {["React", "TypeScript", "Go", "PostgreSQL"].map((t) => (
-                    <li
-                      key={t}
-                      className="rounded-full border border-white/10 bg-white/10 px-2.5 py-1 text-[0.7rem] font-medium leading-none text-zinc-100"
-                    >
-                      {t}
-                    </li>
-                  ))}
-                </ul>
               </div>
             </div>
           </div>
